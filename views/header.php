@@ -1,0 +1,1 @@
+<p>Session : <?=var_dump($_SESSION);?></p>
