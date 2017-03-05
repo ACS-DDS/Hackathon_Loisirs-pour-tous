@@ -91,4 +91,43 @@ class Home extends CI_Controller{
 			}
 		}
 	}
+
+	public function hack(){
+		$this->load->view("hack");
+	}
+
+	public function send(){
+		$data = new stdClass();
+
+		$filtres = $this->input->post("filtres");
+		$region  = $this->input->post("region");
+
+		$data = $this->home_model->get_data_from_home($filtres,$region);
+
+		//print_r($data);
+
+		$data = array_map("json_encode",$data);
+		$data = array_unique($data);
+		$data = array_map("json_decode",$data);
+
+		foreach($data as $activities){
+			foreach($activities as $activity){
+				echo '<li><a class="'.$activity.'" onclick="test(this.className)">'.$activity.'</a></li>';
+			}
+		}
+	}
+
+	public function resultat2(){
+		$data = new stdClass();
+
+		$data->data2 = $this->home_model->get_data_from_type($_SESSION["data"]);
+
+		$this->load->view("header");
+		$this->load->view("result2",$data);
+		$this->load->view("footer");
+	}
+
+	public function session(){
+		$_SESSION["data"] = $this->input->post("data");
+	}
 }
