@@ -221,10 +221,44 @@ class Home_model extends CI_model{
 		}
 	}
 
-	public function get_data_from_type($data){
-		$this->db->select("name_est,email_contact,siteweb,phone,fax,address");
+	public function get_data_from_type($data,$filtres,$limit,$start,$test){
+		$this->db->limit($limit,$start);
+		$this->db->select("docid,name_est,email_contact,siteweb,phone,fax,address,latitude,longitude");
 		$this->db->from("est_access2");
 		$this->db->where("activity",$data);
+
+		if($test){
+			$this->db->where($filtres,"1");
+		}
+		else{
+			foreach($filtres as $filtre){
+				$this->db->where($filtre,"1");
+			}
+		}
+
+		return $this->db->get()->result();
+	}
+
+	public function count_get_data_from_type($data,$filtres,$test){
+		$this->db->from("est_access2");
+		$this->db->where("activity",$data);
+
+		if($test){
+			$this->db->where($filtres,"1");
+		}
+		else{
+			foreach($filtres as $filtre){
+				$this->db->where($filtre,"1");
+			}
+		}
+
+		return count($this->db->get()->result());
+	}
+
+	public function get_data_from_docid($docid){
+		$this->db->select("name_est,email_contact,siteweb,phone,fax,address,longitude,latitude");
+		$this->db->from("est_access2");
+		$this->db->where("docid",$docid);
 
 		return $this->db->get()->result();
 	}

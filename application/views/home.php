@@ -6,14 +6,18 @@
 
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="assets/css/index.css">
+		
 
 		<title>Loisirs pour tous</title>
+
+		<style>path:hover{fill:red;}</style>
+
 	</head>
 	<body style="overflow:hidden">
 		<header></header>
 		<main class="container-fluid">
 			<section id="handicap">
-				<form id="one">
+				<form id="one" style="background:red;padding:1%;text-align:center">
 					<input type="checkbox" class="filled-in" id="filled-in-box1" name="filtres[]" value="h_auditory" />
 					<label for="filled-in-box1">Auditif</label>
 					<input type="checkbox" class="filled-in" id="filled-in-box2" name="filtres[]" value="h_visual"/>
@@ -22,13 +26,6 @@
 					<label for="filled-in-box3">Mental</label>
 					<input type="checkbox" class="filled-in" id="filled-in-box4" name="filtres[]" value="h_mobility"/>
 					<label for="filled-in-box4">Moteur</label><br/>
-
-					<select multiple name="test">
-						<option value="volvo">Volvo</option>
-						<option value="saab">Saab</option>
-						<option value="mercedes">Mercedes</option>
-						<option value="audi">Audi</option>
-					</select>
 
 					<input type="button" onclick="window.location='#lieux'" value="Envoyer">
 				</form>
@@ -47,15 +44,16 @@
 		</main>
 		<footer></footer>
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-checkbox/1.4.0/bootstrap-checkbox.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
 		<script type="text/javascript">
 			var test = function(data){
 				$.ajax({
 					url:"session",
 					method:"POST",
-					data:"data="+data,
+					data:$("#one").serialize() + "&activity=" + data,
 					success:function(){
-						window.location="resultat2";
+						window.location="resultat";
 					}
 				});
 			}
@@ -70,29 +68,20 @@
 				});
 			};
 
-			console.log('ok');
 			var s = Snap("#demo");
 
-			Snap.load("assets/svg/france.svg", onSVGLoaded); //chargement du SVG
-			function onSVGLoaded(data) {
+			Snap.load("assets/svg/france.svg",function(data){ //chargement du SVG
 				var star = data.selectAll('.land'); // étoile du SVG
-				star.forEach(function(elem, i) {
-					elem.click(function() {
-						console.log("c");
-						var reg = elem.attr('data-id');
-					   // setCookie('region', reg, 3);
-						/*this.animate({
-							fill: 'red'
-						});*/
+				star.forEach(function(elem,i){
+					elem.click(function(){
 						window.location="#typeActivitee";
-						div(reg);
+						div(elem.attr('data-id'));
 					});
 				});
 
 				s.append(data); // ajout du svg chargé
-				var grabLink = Snap.select('main .land');
-				console.log(grabLink);
-			}
+			});
+			$('.filled-in').checkboxpicker();
 		</script>
 	</body>
 </html>

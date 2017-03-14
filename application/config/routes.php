@@ -53,10 +53,10 @@ $route["default_controller"] = "home";
 
 $route["about"]     = "home/about";
 $route["resultat"]  = "home/resultat";
-$route["hack"]      = "home/hack";
+$route["resultat/(:num)"] = "home/resultat";
 $route["send"]      = "home/send";
-$route["resultat2"] = "home/resultat2";
 $route["session"]   = "home/session";
+$route["view/(:num)"] = "home/view/$1";
 
 $route["404_override"] = "";
 $route["translate_uri_dashes"] = FALSE;
