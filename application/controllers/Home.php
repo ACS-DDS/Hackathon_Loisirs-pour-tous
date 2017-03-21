@@ -8,7 +8,7 @@ class Home extends CI_Controller{
 		$this->load->helper(array("url","form"));
 		$this->load->model("home_model");
 
-		$this->output->enable_profiler(true);
+		$this->output->enable_profiler(false);
 	}
 
 	public function index(){
@@ -57,40 +57,11 @@ class Home extends CI_Controller{
 		$this->pagination->initialize($config);
 		$data->pagination = $this->pagination->create_links();
 
-		if(is_array($_SESSION["filtres"])){
-			$data->data2 = $this->home_model->get_data_from_type($_SESSION["activity"],$_SESSION["filtres"],$config["per_page"],$page,0);
-		}
-		else{
-			$data->data2 = $this->home_model->get_data_from_type($_SESSION["activity"],substr($_SESSION["filtres"],10),$config["per_page"],$page,1);
-		}
+		$data->data2 = $this->home_model->get_data_from_type($_SESSION["activity"],$_SESSION["filtres"],$_SESSION["region"],$config["per_page"],$page,0);
 
 		$this->load->view("header");
 		$this->load->view("resultat",$data);
 		$this->load->view("footer");
-	}
-
-	public function send(){
-		$data = new stdClass();
-
-		$filtres = $this->input->post("filtres");
-		$region  = $this->input->post("region");
-
-		$data = $this->home_model->get_data_from_home($filtres,$region);
-
-		$data = array_map("json_encode",$data);
-		$data = array_unique($data);
-		$data = array_map("json_decode",$data);
-
-		foreach($data as $activities){
-			foreach($activities as $activity){
-				echo '<li><a class="'.$activity.'" onclick="test(this.className)">'.$activity.'</a></li>';
-			}
-		}
-	}
-
-	public function session(){
-		$_SESSION["activity"] = $this->input->post("activity");
-		$_SESSION["filtres"] = $this->input->post("filtres");
 	}
 
 	public function view($docid){
